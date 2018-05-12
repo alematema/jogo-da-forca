@@ -1,27 +1,30 @@
-var frameIndex = 1;
-
 function createSprite(cssSelector) {
 
-	var sprite = document.querySelector(cssSelector);
-	sprite.nextFrame = nextFrame;
+	var $el = $(cssSelector);
 
-	return sprite;
-}
+	var frames = [
+		'frame1', 'frame2', 'frame3',
+		'frame4', 'frame5', 'frame6',
+		'frame7', 'frame8', 'frame9',
+	];
 
-function getCurrentFrame() {
-	return 'frame' + frameIndex;
-}
+	var current = 0;
+	var last = frames.length - 1;
 
-function nextFrame() {
+	$el.addClass(frames[current]);
 
-	var frame = getCurrentFrame();
-	if (this.classList.contains(frame)) this.classList.remove(frame);
+	function hasNext(){
+		return current + 1 <= last;
+	}
 	
-	frameIndex++;
-	//	reseta frame
-	if (frameIndex > 9) frameIndex = 1;
-	frame = 'frame' + frameIndex;
-	
-	this.classList.add(frame);
+	function moveFrame(from, to) {
+		$el.removeClass(from).addClass(to);
+	}
 
+	function nextFrame() {
+		if( hasNext() ) moveFrame(frames[current], frames[++current] ); 
+	}
+
+	return {nextFrame : nextFrame}
+	
 }
