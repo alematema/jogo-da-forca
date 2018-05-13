@@ -27,7 +27,7 @@ var criaController = function (jogo) {
 	};
 
 	var leChute = function () {
-		jogo.processaChute($entrada.val().trim());
+		jogo.processaChute($entrada.val().trim().substr(0,1 ));
 	};
 
 	var limpaEntrada = function () {
