@@ -4,10 +4,25 @@ var criaJogo = function (sprite) {
 	var etapa = 1;
 	var lacunas = [];
 	
-	function isChuteErrado(chute) {
-		return palavraSecreta.indexOf(chute) == -1;
+	var ganhou = function (){
+		return lacunas.join('') == palavraSecreta;
 	}
-
+	
+	var perdeu = function (){
+		return sprite.isFinished();
+	}
+	
+	var ganhouOuPerdeu = function (){
+		return ganhou() || perdeu();
+	}
+	
+	var reinicia = function (){
+			palavraSecreta = '';
+			etapa = 1;
+			lacunas = [];
+			sprite.reset();
+	}
+	
 	var processaChute = function (chute){
 		
 		var exp = new RegExp(chute,'gi'), resultado, acertou = false;
@@ -47,12 +62,16 @@ var criaJogo = function (sprite) {
 	var proximaEtapa = function () {
 		etapa++;
 	}
-	//API
+	//api
 	return {
 		setPalavraSecreta: setPalavraSecreta,
 		getLacunas: getLacunas,
 		getEtapa: getEtapa,
-		processaChute : processaChute
+		processaChute : processaChute,
+		ganhou : ganhou,
+		perdeu : perdeu,
+		ganhouOuPerdeu : ganhouOuPerdeu,
+		reinicia : reinicia
 	};
 
 }
