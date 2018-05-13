@@ -4,17 +4,20 @@ var criaJogo = function (sprite) {
 	var etapa = 1;
 	var lacunas = [];
 	
-	function chuteErrado(chute) {
+	function isChuteErrado(chute) {
 		return palavraSecreta.indexOf(chute) == -1;
 	}
 
 	var processaChute = function (chute){
 		
-		if( chuteErrado(chute) ){
-			sprite.nextFrame();
-		}else{
-			setLacunas(chute);
+		var exp = new RegExp(chute,'gi'), resultado, acertou = false;
+		
+		while ( resultado = exp.exec(palavraSecreta) ){
+			acertou = lacunas[resultado.index] = chute;
 		}
+		
+		if( !acertou ) sprite.nextFrame();
+
 	}
 
 	var setPalavraSecreta = function (palavra) {
