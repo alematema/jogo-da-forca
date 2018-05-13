@@ -14,7 +14,6 @@ var criaController = function (jogo) {
 		});
 	};
 
-
 	// muda o texto do placeHolder do campo de entrada    
 	var mudaPlaceHolder = function (texto) {
 		$entrada.val('');
@@ -27,44 +26,72 @@ var criaController = function (jogo) {
 	};
 
 	var leChute = function () {
-		jogo.processaChute($entrada.val().trim().substr(0,1 ));
+		jogo.processaChute($entrada.val().trim().substr(0, 1));
 	};
 
 	var limpaEntrada = function () {
 		$entrada.val('');
 	};
 
+	var handleEtapa1 = function () {
+		try {
+			guardaPalavraSecreta();
+			exibeLacunas();
+			mudaPlaceHolder('chute');
+		} catch (err) {
+			alert(err.message);
+		}
+	};
+
+	var handleEtapa2 = function () {
+		try {
+			if (!jogo.ganhouOuPerdeu()) {
+				leChute();
+				exibeLacunas();
+				if (jogo.ganhou()) {
+					handleGanhouJogo();
+				} else if (jogo.perdeu()) {
+					handlePerdeuJogo();
+				}
+				limpaEntrada();
+			}
+		} catch (err) {
+			alert(err.message);
+		}
+	};
+
+	var handleGanhouJogo = function () {
+		mudaPlaceHolder('GANHOU');
+		$entrada.attr('disabled', true);
+		reinicia();
+	};
+
+	var handlePerdeuJogo = function () {
+		mudaPlaceHolder('PERDEU');
+		$entrada.attr('disabled', true);
+		reinicia();
+	};
+	
+	var reinicia = function () {
+		setTimeout(function(){
+			jogo.reinicia();
+			$lacunas.empty();
+			$entrada.val('');
+			mudaPlaceHolder('Palavra secreta');
+			$entrada.attr('disabled', false);
+		},1500);
+	}
+
 	// faz a associação do evento keypress para capturar a entrada do usuário toda vez que ele teclar ENTER
 	var inicia = function () {
 		$entrada.keypress(function (event) {
 			if (event.which == 13) {
 				switch (jogo.getEtapa()) {
-
 					case 1:
-						guardaPalavraSecreta();
-						exibeLacunas();
-						mudaPlaceHolder('chute');
+						handleEtapa1();
 						break;
-
 					case 2:
-
-						if ( ! jogo.ganhouOuPerdeu() ) {
-							
-							leChute();
-							
-							exibeLacunas();
-
-							if (jogo.ganhou()) {
-								mudaPlaceHolder('GANHOU');
-								$entrada.attr('disabled', true);
-							} else if (jogo.perdeu()) {
-								mudaPlaceHolder('PERDEU');
-								$entrada.attr('disabled', true);
-							}
-							
-							limpaEntrada();
-						}
-
+						handleEtapa2()
 						break;
 				}
 			}
