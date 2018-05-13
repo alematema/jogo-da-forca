@@ -1,4 +1,4 @@
-var  createSprite = function (cssSelector) {
+var createSprite = function (cssSelector) {
 
 	var $el = $(cssSelector);
 
@@ -12,19 +12,36 @@ var  createSprite = function (cssSelector) {
 	var last = frames.length - 1;
 
 	$el.addClass(frames[current]);
+	
+	// funcionalidade do isFinished
+	var isFinished = function (){
+		return current == last;
+	}	
+	
+	// funcionalidade do reset
+	var reset = function () {
+		moveFrame(frames[current], frames[0]);
+		current = 0;
+	}
 
-	var hasNext = function (){
+	//funcionalidades do nextFrame
+	var hasNext = function () {
 		return current + 1 <= last;
 	};
-	
+
 	var moveFrame = function (from, to) {
 		$el.removeClass(from).addClass(to);
 	};
 
-	var nextFrame =   function () {
-		if( hasNext() ) moveFrame(frames[current], frames[++current] ); 
+	var nextFrame = function () {
+		if (hasNext()) moveFrame(frames[current], frames[++current]);
 	};
 
-	return {nextFrame : nextFrame};
-	
+
+	return {
+		nextFrame: nextFrame,
+		reset: reset,
+		isFinished : isFinished
+	};
+
 };
