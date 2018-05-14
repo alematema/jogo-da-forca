@@ -1,80 +1,54 @@
-var criaJogo = function (sprite) {
+var criaJogo = sprite => {
 
-	var palavraSecreta;
-	var etapa = 1;
-	var lacunas = [];
-	
-	var ganhou = function (){
-		return lacunas.join('') == palavraSecreta;
+	let palavraSecreta;
+	let etapa = 1;
+	let lacunas = [];
+	const ganhou = () => lacunas.join('') == palavraSecreta;
+	const perdeu = () => sprite.isFinished();
+	const ganhouOuPerdeu = () => ganhou() || perdeu();
+	const getLacunas = () => lacunas;
+	const getEtapa = () => etapa;
+	const criaLacunas = length => lacunas = Array(length).fill('');
+	const proximaEtapa = () => etapa++;
+	const reinicia = () => {
+		palavraSecreta = '';
+		etapa = 1;
+		lacunas = [];
+		sprite.reset();
 	}
-	
-	var perdeu = function (){
-		return sprite.isFinished();
-	}
-	
-	var ganhouOuPerdeu = function (){
-		return ganhou() || perdeu();
-	}
-	
-	var reinicia = function (){
-			palavraSecreta = '';
-			etapa = 1;
-			lacunas = [];
-			sprite.reset();
-	}
-	
-	var processaChute = function (chute){
-		
-		if( !chute.trim() ) throw Error('Chute inválido');
-		
-		var exp = new RegExp(chute,'gi'), resultado, acertou = false;
-		
-		while ( resultado = exp.exec(palavraSecreta) ){
+	const processaChute = chute => {
+		if (!chute.trim()) throw Error('Chute inválido');
+		const exp = new RegExp(chute, 'gi');
+		let resultado, acertou = false;
+		while (resultado = exp.exec(palavraSecreta)) {
 			acertou = lacunas[resultado.index] = chute;
 		}
-		
-		if( !acertou ) sprite.nextFrame();
-
+		if (!acertou) sprite.nextFrame();
 	}
 
-	var setPalavraSecreta = function (palavra) {
-		if( !palavra.trim() ) throw Error('Palavra secreta inválida');
+	const setPalavraSecreta = palavra => {
+		if (!palavra.trim()) throw Error('Palavra secreta inválida');
 		palavraSecreta = palavra;
 		criaLacunas(palavra.length);
 		proximaEtapa();
 	};
 
-	var setLacunas = function (chute){
-		for( var i = 0; i < palavraSecreta.length; i++ ){
-			if( palavraSecreta.charAt(i) == chute) lacunas[i] = chute;
+	const setLacunas = chute => {
+		for (let i = 0; i < palavraSecreta.length; i++) {
+			if (palavraSecreta.charAt(i) == chute) lacunas[i] = chute;
 		}
 	}
-	
-	var getLacunas = function () {
-		return lacunas;
-	};
 
-	var getEtapa = function () {
-		return etapa;
-	};
-
-	var criaLacunas = function (length) {
-		lacunas = Array(length).fill('');
-	}
-
-	var proximaEtapa = function () {
-		etapa++;
-	}
 	//api
 	return {
-		setPalavraSecreta: setPalavraSecreta,
-		getLacunas: getLacunas,
-		getEtapa: getEtapa,
-		processaChute : processaChute,
-		ganhou : ganhou,
-		perdeu : perdeu,
-		ganhouOuPerdeu : ganhouOuPerdeu,
-		reinicia : reinicia
+		setPalavraSecreta,
+		getLacunas,
+		getEtapa,
+		processaChute,
+		ganhou,
+		perdeu,
+		ganhouOuPerdeu,
+		reinicia
 	};
 
 }

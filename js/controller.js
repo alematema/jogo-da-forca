@@ -4,7 +4,7 @@ var criaController = function (jogo) {
 	$lacunas = $('.lacunas');
 
 	// consulta jogo.getLacunas() e exibe para o usuário cada lacuna 
-	var exibeLacunas = function () {
+	const exibeLacunas = function () {
 		$lacunas.empty();
 		jogo.getLacunas().forEach(function (lacuna) {
 			$('<li>')
@@ -15,25 +15,25 @@ var criaController = function (jogo) {
 	};
 
 	// muda o texto do placeHolder do campo de entrada    
-	var mudaPlaceHolder = function (texto) {
+	const mudaPlaceHolder = function (texto) {
 		$entrada.val('');
 		$entrada.attr('placeholder', texto);
 	};
 
 	// passa para jogo.setPalavraSecreta() o valor digitado pelo jogador e chama o a função `exibeLacunas()` e `mudaPlaceHolder()` definidas no controller. 
-	var guardaPalavraSecreta = function () {
+	const guardaPalavraSecreta = function () {
 		jogo.setPalavraSecreta($entrada.val().trim());
 	};
 
-	var leChute = function () {
+	const leChute = function () {
 		jogo.processaChute($entrada.val().trim().substr(0, 1));
 	};
 
-	var limpaEntrada = function () {
+	const limpaEntrada = function () {
 		$entrada.val('');
 	};
 
-	var handleEtapa1 = function () {
+	const handleEtapa1 = function () {
 		try {
 			guardaPalavraSecreta();
 			exibeLacunas();
@@ -43,7 +43,7 @@ var criaController = function (jogo) {
 		}
 	};
 
-	var handleEtapa2 = function () {
+	const handleEtapa2 = function () {
 		try {
 			if (!jogo.ganhouOuPerdeu()) {
 				leChute();
@@ -60,19 +60,19 @@ var criaController = function (jogo) {
 		}
 	};
 
-	var handleGanhouJogo = function () {
+	const handleGanhouJogo = function () {
 		mudaPlaceHolder('GANHOU');
 		$entrada.attr('disabled', true);
 		reinicia();
 	};
 
-	var handlePerdeuJogo = function () {
+	const handlePerdeuJogo = function () {
 		mudaPlaceHolder('PERDEU');
 		$entrada.attr('disabled', true);
 		reinicia();
 	};
 	
-	var reinicia = function () {
+	const reinicia = function () {
 		setTimeout(function(){
 			jogo.reinicia();
 			$lacunas.empty();
@@ -83,7 +83,7 @@ var criaController = function (jogo) {
 	}
 
 	// faz a associação do evento keypress para capturar a entrada do usuário toda vez que ele teclar ENTER
-	var inicia = function () {
+	const inicia = function () {
 		$entrada.keypress(function (event) {
 			if (event.which == 13) {
 				switch (jogo.getEtapa()) {
